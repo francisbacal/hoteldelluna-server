@@ -3,6 +3,8 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
+import rooms from './src/routes/rooms'
+
 
 const port = process.env.PORT || 5000
 
@@ -40,6 +42,7 @@ app.use((req,res,next)=>next());
 
 app.get('/', (req, res, next)=> res.send('HOTEL DEL LUNA BACKEND SERVER'));
 app.use('/public', express.static('src/assets/images'));
+app.use('/rooms', rooms);
 
 
 
