@@ -38,7 +38,8 @@ app.use((req,res,next)=>next());
 | ROUTES 
 --------------------------*/
 
-app.get('/', (req, res, next)=> res.send('HOTEL DEL LUNA BACKEND SERVER'))
+app.get('/', (req, res, next)=> res.send('HOTEL DEL LUNA BACKEND SERVER'));
+app.use('/public', express.static('src/assets/images'));
 
 
 
