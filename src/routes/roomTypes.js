@@ -39,7 +39,13 @@ function getAll(req,res,next){
 
 function getOne(req,res,next){
     roomTypeService.getOne(req.params.id)
-        .then(roomType => res.json(roomType))
+        .then(roomType => {
+            if (roomType) {
+                res.json(roomType)
+            } else {
+                next(`Room type not found`)
+            }
+        })
         .catch(next)
 }
 
@@ -60,7 +66,6 @@ function update(req,res,next){
 function _delete(req,res,next){
     roomTypeService._delete(req)
         .then(roomType => {
-            console.log(roomType)
             if (roomType) {
                 res.json(roomType)
             } else {
