@@ -1,4 +1,6 @@
 import User from './../models/User'
+import passport from 'passport'
+import './../lib/passport-setup'
 
 export default authorize;
 
@@ -9,17 +11,22 @@ function authorize(roles = []) {
         roles = [roles]
     }
 
-    return [
+    return (
         async (req, res, next) => {
+            await passport.authenticate('jwt', {session:false}, async(err, user) => {
+                if (err) {
+                    return next(err)
+                }
 
-            let user = await User.findById(req.user._id);
-
-            if(!user || (roles.length && !roles.includes(user.role))) {
-                return res.status(401).json({error: 'Unauthorized'})
-            }
-
-            req.user.role = user.role;
-            next();
+                if(!user || (roles.length && !roles.includes(user.role))) {
+                    return res.status(401).json({error: 'Unauthorized'})
+                }
+                
+                req.user = user
+                next();
+    
+            })(req, res, next)
+            
         }
-    ]
+    )
 }

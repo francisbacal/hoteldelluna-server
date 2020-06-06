@@ -19,10 +19,10 @@ const router = express.Router();
 router.post('/', passport.authenticate('jwt', {session:false}),  authorize(Role.Admin), (req, res, next) => {
     RoomType.create(req.body).then(roomType => res.json(roomType)).catch(next)
 });
-router.get('/', passport.authenticate('jwt', {session:false}),  authorize(Role.Admin), getAll);
-router.get('/:id', passport.authenticate('jwt', {session:false}), authorize(Role.Admin), getOne);
-router.put('/:id', passport.authenticate('jwt', {session:false}), authorize(Role.Admin), updateSchema, update);
-router.delete('/:id', passport.authenticate('jwt', {session:false}), authorize(Role.Admin), _delete)
+router.get('/', authorize(Role.Admin), getAll);
+router.get('/:id', authorize(Role.Admin), getOne);
+router.put('/:id', authorize(Role.Admin), updateSchema, update);
+router.delete('/:id', authorize(Role.Admin), _delete)
 
 
 export default router
@@ -59,7 +59,13 @@ function updateSchema(req, res, next) {
 
 function update(req,res,next){
     roomTypeService.update(req)
-        .then(roomType =>res.json(roomType))
+        .then(roomType => {
+            if (roomType) {
+                res.json(roomType)
+            } else {
+                next(`Room type not found`)
+            }
+        })
         .catch(next)
 }
 
