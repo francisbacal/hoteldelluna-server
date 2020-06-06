@@ -3,7 +3,8 @@ import RoomType from './../models/RoomType'
 export default {
     getAll,
     getOne,
-    update
+    update,
+    _delete
 }
 
 async function getAll() {
@@ -22,5 +23,10 @@ async function update(req) {
         {name: req.body.name}, 
         {new: true})
 
+    return type
+}
+
+async function _delete(req) {
+    const type = await RoomType.findByIdAndRemove(req.params.id)
     return type
 }

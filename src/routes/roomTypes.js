@@ -16,13 +16,13 @@ const router = express.Router();
 | ROUTES
 --------------------------*/
 
-router.post('/add', passport.authenticate('jwt', {session:false}),  authorize(Role.Admin), (req, res, next) => {
+router.post('/', passport.authenticate('jwt', {session:false}),  authorize(Role.Admin), (req, res, next) => {
     RoomType.create(req.body).then(roomType => res.json(roomType)).catch(next)
-})
-
+});
 router.get('/', passport.authenticate('jwt', {session:false}),  authorize(Role.Admin), getAll);
 router.get('/:id', passport.authenticate('jwt', {session:false}), authorize(Role.Admin), getOne);
 router.put('/:id', passport.authenticate('jwt', {session:false}), authorize(Role.Admin), updateSchema, update);
+router.delete('/:id', passport.authenticate('jwt', {session:false}), authorize(Role.Admin), _delete)
 
 
 export default router
@@ -54,5 +54,18 @@ function updateSchema(req, res, next) {
 function update(req,res,next){
     roomTypeService.update(req)
         .then(roomType =>res.json(roomType))
+        .catch(next)
+}
+
+function _delete(req,res,next){
+    roomTypeService._delete(req)
+        .then(roomType => {
+            console.log(roomType)
+            if (roomType) {
+                res.json(roomType)
+            } else {
+                next(`Room type not found`)
+            }
+        })
         .catch(next)
 }
