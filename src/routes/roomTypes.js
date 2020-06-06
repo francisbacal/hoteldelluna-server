@@ -1,8 +1,10 @@
 import express from 'express'
 import passport from 'passport'
+import Joi from '@hapi/joi'
 import './../lib/passport-setup'
 
 import authorize from './../_middleware/authorize'
+import validateRequest from './../_middleware/validateRequest'
 
 import RoomType from './../models/RoomType'
 import Role from '../_helpers/role'
@@ -20,7 +22,7 @@ router.post('/add', passport.authenticate('jwt', {session:false}),  authorize(Ro
 
 router.get('/', passport.authenticate('jwt', {session:false}),  authorize(Role.Admin), getAll);
 router.get('/:id', passport.authenticate('jwt', {session:false}), authorize(Role.Admin), getOne);
-router.put('/:id', passport.authenticate('jwt', {session:false}), authorize(Role.Admin), update);
+router.put('/:id', passport.authenticate('jwt', {session:false}), authorize(Role.Admin), updateSchema, update);
 
 
 export default router
@@ -39,6 +41,14 @@ function getOne(req,res,next){
     roomTypeService.getOne(req.params.id)
         .then(roomType => res.json(roomType))
         .catch(next)
+}
+
+function updateSchema(req, res, next) {
+    const updateSchemaRules = Joi.object({
+        name: Joi.string().required(),
+    });
+
+    validateRequest(req, next, updateSchemaRules)
 }
 
 function update(req,res,next){

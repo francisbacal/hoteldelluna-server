@@ -69,11 +69,15 @@ const formatError = (err) => {
 
 app.use((err, req, res, next)=> 
     {
-        res.status(400).send (
-            {
-                error: formatError(err.message)
-            }
-        )
+        if (typeof err === 'object') {
+            res.status(400).send (
+                {
+                    error: formatError(err.message)
+                }
+            )
+        } else {
+            res.status(400).json({error: err})
+        }
     }
 )
 
