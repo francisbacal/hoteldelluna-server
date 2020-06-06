@@ -28,6 +28,11 @@ const UserSchema = new Schema(
         {
             type: String,
             required: [true, 'Field required'],
+        },
+        role:
+        {
+            type: String,
+            default: 'User'
         }
     }
 );
@@ -75,10 +80,11 @@ UserSchema.path('email').validate(async function (v){
     if (user) {
         this.invalidate('email', 'Email already taken')
     }
-
-
 })
 
+UserSchema.set('toJSON', {
+    versionKey: false
+})
 
 /* ========================
 | EXPORT MODEL

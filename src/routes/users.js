@@ -1,44 +1,35 @@
 import express from 'express';
-import bcrypt from 'bcrypt';
-import passport from 'passport'
-import jwt from 'jsonwebtoken'
 
 import User from '../models/User';
+import userService from './../_services/user.services'
 
-import './../lib/passport-setup'
 
 const router = express.Router()
 
 
 /* ========================
-| REGISTER USER
+| ROUTES
 --------------------------*/
 
 router.post('/register', (req,res,next)=> {
-    
     User.create(req.body).then(user => res.send(user)).catch(next)
+});
 
-})
+router.post('/login', authenticate);
 
-/* ========================
-| LOGIN USER
---------------------------*/
-
-router.post('/login', (req,res,next)=> {
-    
-    res.send('USER POST')
-
-})
 
 /* ========================
-| GET USER
+| EXPORT
 --------------------------*/
-
-router.post('/profile', (req,res,next)=> {
-    
-    res.send('USER POST')
-    
-})
-
 
 export default router;
+
+/* ========================
+| FUNCTIONS
+--------------------------*/
+
+function authenticate(req, res, next) {
+    userService.authenticate(req.body)
+        .then(user => user ? res.json(user) : res.status(400).send({error: 'Login failed. Check Credentials'}))
+        .catch(next)
+}
