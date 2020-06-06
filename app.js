@@ -5,6 +5,7 @@ import cors from 'cors';
 
 import rooms from './src/routes/rooms'
 import users from './src/routes/users'
+import roomTypes from './src/routes/roomTypes'
 
 
 const port = process.env.PORT || 5000
@@ -21,7 +22,7 @@ mongoose.connect('mongodb://localhost:27017/hoteldelluna',
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
-        useFindAndModify: true
+        useFindAndModify: false
     }
 );
 
@@ -43,8 +44,9 @@ app.use((req,res,next)=>next());
 
 app.get('/', (req, res, next)=> res.send('HOTEL DEL LUNA BACKEND SERVER'));
 app.use('/public', express.static('src/assets/images'));
-app.use('/rooms', rooms);
 app.use('/users', users);
+app.use('/rooms', rooms);
+app.use('/rooms/types', roomTypes);
 
 
 
