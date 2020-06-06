@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 
 import rooms from './src/routes/rooms'
+import users from './src/routes/users'
 
 
 const port = process.env.PORT || 5000
@@ -43,6 +44,7 @@ app.use((req,res,next)=>next());
 app.get('/', (req, res, next)=> res.send('HOTEL DEL LUNA BACKEND SERVER'));
 app.use('/public', express.static('src/assets/images'));
 app.use('/rooms', rooms);
+app.use('/users', users);
 
 
 
@@ -51,11 +53,23 @@ app.use('/rooms', rooms);
 | ERROR HANDLING
 --------------------------*/
 
+let errors = {}
+const formatError = (err) => {
+    const allErrors = err.substring(err.indexOf(':')+1).trim();
+    const errorsArray = allErrors.split(',').map(e => e.trim());
+
+    errorsArray.forEach(error =>{
+        const [key, value] = error.split(':').map(e => e.trim())
+        errors[key] = value
+    })
+    return errors
+}
+
 app.use((err, req, res, next)=> 
     {
         res.status(400).send (
             {
-                error: err.message
+                error: formatError(err.message)
             }
         )
     }
