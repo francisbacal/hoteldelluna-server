@@ -16,36 +16,37 @@ const RoomSchema = new Schema(
             unique: true,
             required: [true, 'Room name is required']
         },
-        categoryId:
+        roomType:
         {
             type: Schema.Types.ObjectId,
-            ref: 'Category',
-            required: [true, 'Category is required']
+            ref: 'RoomType',
+            required: [true, 'Room Type is required']
         },
-        price:
-        {
-            type: Number,
-            min: [1, 'Invalid Price'],
-            required: [true, 'Price is required']
-        },
-        description:
+        status:
         {
             type: String,
-            required: [true, 'Description is required']
-        },
-        image:
-        {
-            type: String,
-            minLength: [8, 'Invalid image path'],
-            required: [true, 'Image field is required']
+            default: 'Available'
         }
     }
 )
 
+const Room = mongoose.model('Room', RoomSchema);
+
+RoomSchema.path('name').validate(async function(v){
+    let room = await Room.findOne({name: this.name})
+    
+    if (room) {
+        this.invalidate('name', 'Room already exists.')
+    }
+})
+
+RoomSchema.set('toJSON', {
+    versionKey: false
+})
 
 /* ========================
 | EXPORT MODEL
 --------------------------*/
 
-const Room = mongoose.model('Room', RoomSchema);
+
 export default Room;

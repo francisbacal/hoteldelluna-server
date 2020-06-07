@@ -6,7 +6,6 @@ import storage from './../lib/multer-setup'
 import authorize from './../_middleware/authorize'
 import validateRequest from './../_middleware/validateRequest'
 
-import RoomType from './../models/RoomType'
 import Role from '../_helpers/role'
 import roomTypeService from './../_services/roomTypes.services'
 

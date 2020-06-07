@@ -6,6 +6,7 @@ import cors from 'cors';
 import rooms from './src/routes/rooms'
 import users from './src/routes/users'
 import roomTypes from './src/routes/roomTypes'
+import bookings from './src/routes/bookings'
 
 
 const port = process.env.PORT || 5000
@@ -43,11 +44,12 @@ app.use((req,res,next)=>next());
 --------------------------*/
 
 app.get('/', (req, res, next)=> res.send('HOTEL DEL LUNA BACKEND SERVER'));
-app.use('/public', express.static('public'));
 app.use('/users', users);
 app.use('/rooms', rooms);
-app.use('/rooms/types', roomTypes);
+app.use('/types', roomTypes);
+app.use('/bookings', bookings);
 
+app.use('/public', express.static('public'));
 
 
 
