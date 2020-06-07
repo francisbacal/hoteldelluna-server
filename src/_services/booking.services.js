@@ -1,5 +1,4 @@
 import Booking from './../models/Booking'
-import RoomType from './../models/RoomType'
 import Room from './../models/Room'
 
 export default {
@@ -17,14 +16,28 @@ async function add(req) {
     return booking
 }
 
-async function getAll() {
-    const bookings = await Booking.find()
-    return bookings
+async function getAll(req) {
+
+    if (req.user.role === 'Admin') {       
+        const bookings = await Booking.find()
+        return bookings
+    } else {
+        const bookings = await Booking.find({customerEmail: req.user.email})
+        return bookings
+    }
 }
 
 async function getOne(req) {
-    const booking = await Booking.findById(req.params.id)
-    return booking
+    if (req.user.role === 'Admin') {
+        const booking = await Booking.findById(req.params.id)
+        return booking;
+    } else {
+        const booking = await Booking.find({
+            '_id': req.params.id, 
+            customerEmail: req.user.email
+        })
+        return booking;
+    }
 }
 
 async function update(req) {

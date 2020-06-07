@@ -52,14 +52,28 @@ function add(req, res, next) {
 }
 
 function getAll(req, res, next) {
-    bookingService.getAll()
-        .then(bookings => res.json(bookings))
+    bookingService.getAll(req)
+        .then(bookings => {
+            if (bookings.length) {
+                
+                res.json(bookings)
+
+            } else {
+                next('No matching booking found')
+            }
+        })
         .catch(next)
 }
 
 function getOne(req, res, next) {
     bookingService.getOne(req)
-        .then(booking => res.json(booking))
+        .then(booking => {
+            if (booking.length) {
+                res.json(booking)
+            } else {
+                next('No matching booking found')
+            }
+        })
         .catch(next)
 }
 
@@ -69,10 +83,9 @@ function updateSchema(req, res, next){
         room: JoiObjectId().allow('', null),
         bookingDate: 
         {
-            start: Joi.date().allow('', null),
-            end: Joi.date().allow('', null)
-        },
-        total: Joi.number().allow('', null),
+            start: Joii.date().utc().allow('', null),
+            end: Joii.date().utc().allow('', null)
+        }
     })
 
     validateRequest(req, next, schema)
