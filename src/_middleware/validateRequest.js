@@ -7,7 +7,6 @@ function validateRequest(req, next, schema) {
         stripUnknown: true
     };
     const { error, value } = schema.validate(req.body, options);
-    
     if(error) {
         const err = `${error.details.map(err => err.message).join(', ')}`
         next(err);

@@ -64,7 +64,7 @@ UserSchema.virtual('confirmPassword')
 
 UserSchema.path('passwordHash').validate(function (v){
     if (this._password !== this._confirmPassword) {
-        this.invalidate('passwordConfirm', 'must match confirmation')
+        this.invalidate('passwordConfirm', 'Password does not match')
     }
 
     if (this.isNew && !this._password) {
@@ -78,7 +78,7 @@ UserSchema.path('email').validate(async function (v){
     let user = await User.findOne({email: this.email})
     
     if (user) {
-        this.invalidate('email', 'Email already taken')
+        this.invalidate('email', 'Email already used')
     }
 })
 

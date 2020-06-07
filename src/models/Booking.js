@@ -11,7 +11,8 @@ const BookingSchema = new Schema(
         room:
         {
             type: Schema.Types.ObjectId,
-            ref: 'Room'
+            ref: 'Room',
+            required: [true, 'Please choose a room']
         },
         bookingDate:
         {
@@ -28,9 +29,16 @@ const BookingSchema = new Schema(
             type: Boolean,
             default: false
         }
-    }
+    },
+    { timestamps: true }
 )
 
 const Booking = mongoose.model('Booking', BookingSchema)
+
+
+BookingSchema.set('toJSON',{
+    versionKey: false
+})
+
 
 export default Booking

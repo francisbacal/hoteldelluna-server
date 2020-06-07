@@ -1,23 +1,28 @@
 import express from 'express';
-
+import Joi from '@hapi/joi';
+import JoiObjId from 'joi-objectid';
+import JoiDate from '@hapi/joi-date';
 
 import authorize from './../_middleware/authorize';
 
 import Role from './../_helpers/role';
 import bookingService from './../_services/booking.services'
+import validateRequest from '../_middleware/validateRequest';
 
 
 const router = express.Router();
+const JoiObjectId = JoiObjId(Joi);
+const Joii = Joi.extend(JoiDate)
 
 /* ========================
 | ROUTES
 --------------------------*/
 
-router.post('/', add);
+router.post('/', addSchema, add);
 router.get('/', authorize([Role.Admin, Role.User]), getAll);
 router.get('/:id', authorize([Role.Admin, Role.User]), getOne);
 router.put('/:id', authorize([Role.Admin, Role.User]), update);
-router.delete('/:id', authorize([Role.Admin, Role.User]), _delete);
+router.delete('/:id', authorize([Role.Admin, Role.User]), updateSchema, _delete);
 
 
 export default router;
@@ -27,6 +32,18 @@ export default router;
 | FUNCTIONS
 --------------------------*/
 
+function addSchema(req, res, next) {
+    const schema = Joi.object().keys({
+        customerEmail: Joi.string().email().required(),
+        room: JoiObjectId().required(),
+        bookingDate: {
+            start: Joii.date().min('now').utc().max(Joi.ref('end')).required(),
+            end: Joii.date().min('now').utc().required()
+        }
+    })
+
+    validateRequest(req, next, schema);
+}
 
 function add(req, res, next) {
     bookingService.add(req)
@@ -44,6 +61,21 @@ function getOne(req, res, next) {
     bookingService.getOne(req)
         .then(booking => res.json(booking))
         .catch(next)
+}
+
+function updateSchema(req, res, next){
+    const schema = Joi.Object().keys({
+        customerEmail: Joi.string().email().allow('', null),
+        room: JoiObjectId().allow('', null),
+        bookingDate: 
+        {
+            start: Joi.date().allow('', null),
+            end: Joi.date().allow('', null)
+        },
+        total: Joi.number().allow('', null),
+    })
+
+    validateRequest(req, next, schema)
 }
 
 function update(req, res, next) {
