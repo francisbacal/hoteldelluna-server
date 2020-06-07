@@ -43,7 +43,7 @@ app.use((req,res,next)=>next());
 --------------------------*/
 
 app.get('/', (req, res, next)=> res.send('HOTEL DEL LUNA BACKEND SERVER'));
-app.use('/public', express.static('src/assets/images'));
+app.use('/public', express.static('public'));
 app.use('/users', users);
 app.use('/rooms', rooms);
 app.use('/rooms/types', roomTypes);
@@ -69,6 +69,7 @@ const formatError = (err) => {
 
 app.use((err, req, res, next)=> 
     {
+        console.log('ERROR', err.message)
         if (typeof err === 'object') {
             res.status(400).send (
                 {

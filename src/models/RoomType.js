@@ -3,7 +3,34 @@ import { Schema } from 'mongoose'
 
 const RoomTypeSchema = new Schema(
     {
-        name: {type: String, required: [true, 'Name field is required']}
+        name: 
+        {
+            type: String, 
+            required: [true, 'Name field is required'], 
+            unique: true
+        },
+        price: 
+        {
+            type: Number, 
+            min: [1, 'Invalid Price'], 
+            required: [true, 'Price is required']
+        },
+        description: 
+        {
+            type: String, 
+            required: [true, 'Description is required.']
+        },
+        images: 
+        [
+            {
+                name:
+                {
+                    type: String, 
+                    minLength: [8, 'Invalid image path'], 
+                    required: [true, 'Image is required']
+                }
+            }
+        ]
     }
 );
 

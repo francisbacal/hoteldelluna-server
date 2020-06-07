@@ -28,7 +28,7 @@ const RoomSchema = new Schema(
             min: [1, 'Invalid Price'],
             required: [true, 'Price is required']
         },
-        descriptiom:
+        description:
         {
             type: String,
             required: [true, 'Description is required']

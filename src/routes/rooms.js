@@ -3,27 +3,15 @@ import multer from 'multer';
 import passport from 'passport';
 import Room from '../models/Room';
 
+import storage from './../lib/multer-setup'
+
 
 const router = express.Router()
-
-/* ========================
-| MULTER SETUP
---------------------------*/
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'src/assets/images')
-    },
-    filename: function(req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
-
 const upload = multer({ storage });
 
 
 /* ========================
-| STORE ROOM
+| ROUTES
 --------------------------*/
 
 router.post('/', (req,res,next) => 
@@ -33,31 +21,11 @@ router.post('/', (req,res,next) =>
     
 )
 
-/* ========================
-| GET ROOM
---------------------------*/
-
 router.get('/', (req,res,next) => 
     {
 
     }
 )
-
-/* ========================
-| GET ROOMS
---------------------------*/
-
-
-
-/* ========================
-| UPDATE ROOM
---------------------------*/
-
-
-
-/* ========================
-| DELETE ROOM
---------------------------*/
 
 
 export default router;

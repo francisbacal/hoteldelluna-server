@@ -17,11 +17,6 @@ router.post('/register', (req,res,next)=> {
 
 router.post('/login', authenticate);
 
-
-/* ========================
-| EXPORT
---------------------------*/
-
 export default router;
 
 /* ========================

@@ -1,4 +1,3 @@
-import User from './../models/User'
 import passport from 'passport'
 import './../lib/passport-setup'
 

@@ -1,10 +1,16 @@
 import RoomType from './../models/RoomType'
 
 export default {
+    add,
     getAll,
     getOne,
     update,
     _delete
+}
+
+async function add(req) {
+    const type = await RoomType.create(req.body);
+    return type;
 }
 
 async function getAll() {
@@ -20,8 +26,9 @@ async function getOne(id) {
 async function update(req) {
     const type = await RoomType.findByIdAndUpdate(
         req.params.id, 
-        {name: req.body.name}, 
-        {new: true})
+        req.body, 
+        {new: true}
+    )
 
     return type
 }
