@@ -1,8 +1,8 @@
 {
   "name": "hotel-del-luna-server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Hotel Del Luna API",
+  "main": "app.js",
   "scripts": {
     "start": "nodemon --exec babel-node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
