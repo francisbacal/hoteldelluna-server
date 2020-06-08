@@ -55,9 +55,7 @@ function getAll(req, res, next) {
     bookingService.getAll(req)
         .then(bookings => {
             if (bookings.length) {
-                
                 res.json(bookings)
-
             } else {
                 next('No matching booking found')
             }
@@ -68,7 +66,7 @@ function getAll(req, res, next) {
 function getOne(req, res, next) {
     bookingService.getOne(req)
         .then(booking => {
-            if (booking.length) {
+            if (booking) {
                 res.json(booking)
             } else {
                 next('No matching booking found')

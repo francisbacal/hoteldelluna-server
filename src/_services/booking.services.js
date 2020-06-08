@@ -29,10 +29,10 @@ async function getAll(req) {
 
 async function getOne(req) {
     if (req.user.role === 'Admin') {
-        const booking = await Booking.findById(req.params.id)
+        const booking = await Booking.findOne({_id: req.params.id})
         return booking;
     } else {
-        const booking = await Booking.find({
+        const booking = await Booking.findOne({
             '_id': req.params.id, 
             customerEmail: req.user.email
         })
