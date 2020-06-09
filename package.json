@@ -4,6 +4,7 @@
   "description": "Hotel Del Luna API",
   "main": "app.js",
   "scripts": {
+    "seed": "babel-node ./src/seed/seedRoom",
     "start": "nodemon --exec babel-node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

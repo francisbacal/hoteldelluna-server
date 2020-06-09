@@ -64,6 +64,8 @@ async function findRooms(req) {
     //find all available rooms without bookings first
     result = await getNoBookings(allRoomTypes, guests)
 
+    console.log(result)
+
     //If all rooms has booking
     //find all rooms that doesn't clash with booked dates
     if (!result.length) {
@@ -83,17 +85,16 @@ async function asyncForEach(array, callback) {
 async function getNoBookings(allRoomTypes, guests) {
     let typeArr= []
     await asyncForEach(allRoomTypes, async (roomType)=>{
-    
         let room = await Room.findOne({
             roomType: roomType._id, 
-            status: 'Available',
-            guests: {$gte: parseInt(guests)},
-            $or: 
-            [
-                {bookings: {$exists: false}},
-                {bookings: {$size: 0}},
-                {bookings: null}
-            ]
+            // status: 'Available',
+            // guests: {$gte: parseInt(guests)},
+            // $or: 
+            // [
+            //     {bookings: {$exists: false}},
+            //     {bookings: {$size: 0}},
+            //     {bookings: null}
+            // ]
         })
 
         if (room) {

@@ -35,8 +35,8 @@ export default router;
 --------------------------*/
 
 function addSchema(req,res,next) {
-    const schema = Joi.object().keys({
-        name: Joi.string().required(),
+    const schema = Joi.object({
+        name: Joi.number().required(),
         roomType: Joi.string().required()
     });
 
@@ -76,7 +76,7 @@ function updateSchema(req, res, next) {
     })
     
     const schema = Joi.object().keys({
-        name: Joi.string().required(),
+        name: Joi.number().required(),
         roomType: JoiObjectId().required(),
         status: Joi.string().required(),
         bookings: Joi.array().items(bookingSchema)

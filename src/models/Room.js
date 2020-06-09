@@ -12,9 +12,9 @@ const RoomSchema = new Schema(
     {
         name:
         {
-            type: String,
+            type: Number,
             unique: true,
-            required: [true, 'Room name is required']
+            required: [true, 'Room number is required']
         },
         roomType:
         {
@@ -49,7 +49,7 @@ const RoomSchema = new Schema(
 const Room = mongoose.model('Room', RoomSchema);
 
 RoomSchema.path('name').validate(async function(v){
-    let room = await Room.findOne({name: this.name})
+    let room = await Room.findOne({name: this.number})
     
     if (room) {
         this.invalidate('name', 'Room already exists.')

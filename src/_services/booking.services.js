@@ -15,7 +15,7 @@ async function add(req) {
     
     const booking = await Booking.create(req.body)
     await bookRoom(booking)
-    // return booking
+    return booking
 }
 
 async function getAll(req) {
@@ -71,13 +71,13 @@ async function getTotal(req) {
 }
 
 async function bookRoom(booking) {
-    const {_id, bookingDate, roomType} = booking
+    const {_id, bookingDate, roomType, guests} = booking
 
-    console.log(booking)
-    //find all available rooms without booking first
-    let rooms =  await Room.find({
+    //find a room without booking first
+    let room =  await Room.findOne({ 
         roomType: roomType, 
         status: 'Available',
+        guests: {$gte: parseInt(guests)},
         $or: 
         [
             {bookings: {$exists: false}},
@@ -87,11 +87,12 @@ async function bookRoom(booking) {
     })
     
 
-    //find all rooms that doesn't clash with booked dates
-    if (!rooms.length) {
-        rooms =  await Room.find({
+    //find a room that doesn't clash with booked dates
+    if (!room.length) {
+        room =  await Room.findOne({
             roomType: roomType, 
             status: 'Available',
+            guests: {$gte: parseInt(guests)},
             $nor: 
             [
                 {  
@@ -112,12 +113,10 @@ async function bookRoom(booking) {
             ]
         })
     }
-
-    console.log(rooms)
     
-    //add booking to first instance of room in array
+    //add booking to Room
     await Room.findByIdAndUpdate(
-        rooms[0]._id, 
+        room._id, 
         {
             $addToSet: {
                 bookings: {
@@ -128,5 +127,4 @@ async function bookRoom(booking) {
             }
         }
     )
-
 }   

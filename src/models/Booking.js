@@ -11,6 +11,8 @@ const BookingSchema = new Schema(
         guests:
         {
             type: Number,
+            min: [1, "Number of guests should not be less than 1"],
+            max: [8, "Number of guests can not exceed 8"],
             required: [true, 'Number of guests required.']
         },
         roomType:
