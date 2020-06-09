@@ -22,6 +22,11 @@ const RoomSchema = new Schema(
             ref: 'RoomType',
             required: [true, 'Room Type is required']
         },
+        maxguests: 
+        {
+            type: Number,
+            required: [true, "Max guests required"]
+        },
         bookings:[
             {
                 bookingId: {

@@ -23,8 +23,10 @@ router.post('/', authorize(Role.Admin), addSchema, add);
 router.get('/', authorize([Role.Admin, Role.Manager, Role.Reception]), getAll);
 router.get('/:id', authorize([Role.Admin, Role.Manager, Role.Reception]), getOne);
 router.put('/:id', authorize([Role.Admin, Role.Manager, Role.Reception]), updateSchema, update);
-router.delete('/:id', authorize(Role.Admin), _delete),
-router.get('/:start/:end/:guests', findRooms)
+router.delete('/:id', authorize(Role.Admin), _delete);
+router.delete('/:id/:bookingId', authorize([Role.Admin, Role.Manager, Role.Reception]), removeBooking);
+router.get('/:start/:end/:guests', findRooms);
+
 
 
 export default router;
@@ -37,7 +39,8 @@ export default router;
 function addSchema(req,res,next) {
     const schema = Joi.object({
         name: Joi.number().required(),
-        roomType: Joi.string().required()
+        roomType: Joi.string().required(),
+        maxguests: Joi.Number().required()
     });
 
     validateRequest(req, next, schema)
@@ -79,7 +82,8 @@ function updateSchema(req, res, next) {
         name: Joi.number().required(),
         roomType: JoiObjectId().required(),
         status: Joi.string().required(),
-        bookings: Joi.array().items(bookingSchema)
+        bookings: Joi.array().items(bookingSchema),
+        maxguests: Joi.number().required()
     });
 
     validateRequest(req, next, schema)
@@ -118,5 +122,11 @@ function findRooms(req, res, next) {
                 res.json(rooms)
             }
         })
+        .catch(next)
+}
+
+function removeBooking(req, res, next) {
+    roomService.removeBooking(req)
+        .then(room => res.json(room))
         .catch(next)
 }

@@ -7,7 +7,8 @@ export default {
     getOne,
     update,
     _delete,
-    findRooms
+    findRooms,
+    removeBooking
 
 }
 
@@ -50,9 +51,20 @@ async function _delete(req) {
     return room
 }
 
+async function removeBooking(req) {
+    const {id, bookingId} = req.params
+    const room = await Room.findByIdAndUpdate(
+        id,
+        { $pull: {bookings: { _id: bookingId } } },
+        {new: true}
+    )
+
+    return room
+}
+
 
 async function findRooms(req) {
-    const {guests, start, end} = req.params
+    const {guests} = req.params
 
     //declare room types array to be returned
     let result = []
@@ -64,7 +76,6 @@ async function findRooms(req) {
     //find all available rooms without bookings first
     result = await getNoBookings(allRoomTypes, guests)
 
-    console.log(result)
 
     //If all rooms has booking
     //find all rooms that doesn't clash with booked dates
@@ -87,14 +98,14 @@ async function getNoBookings(allRoomTypes, guests) {
     await asyncForEach(allRoomTypes, async (roomType)=>{
         let room = await Room.findOne({
             roomType: roomType._id, 
-            // status: 'Available',
-            // guests: {$gte: parseInt(guests)},
-            // $or: 
-            // [
-            //     {bookings: {$exists: false}},
-            //     {bookings: {$size: 0}},
-            //     {bookings: null}
-            // ]
+            status: 'Available',
+            maxguests: {$gte: parseInt(guests)},
+            $or: 
+            [
+                {bookings: {$exists: false}},
+                {bookings: {$size: 0}},
+                {bookings: null}
+            ]
         })
 
         if (room) {
@@ -114,7 +125,7 @@ async function getRoomsWithBookings(allRoomTypes, req) {
         let room =  await Room.findOne({
             roomType: roomType._id, 
             status: 'Available',
-            guests: {$gte: parseInt(guests)},
+            maxguests: {$gte: parseInt(guests)},
             $nor: 
             [
                 {  

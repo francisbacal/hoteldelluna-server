@@ -77,7 +77,7 @@ async function bookRoom(booking) {
     let room =  await Room.findOne({ 
         roomType: roomType, 
         status: 'Available',
-        guests: {$gte: parseInt(guests)},
+        maxguests: {$gte: parseInt(guests)},
         $or: 
         [
             {bookings: {$exists: false}},
@@ -92,7 +92,7 @@ async function bookRoom(booking) {
         room =  await Room.findOne({
             roomType: roomType, 
             status: 'Available',
-            guests: {$gte: parseInt(guests)},
+            maxguests: {$gte: parseInt(guests)},
             $nor: 
             [
                 {  

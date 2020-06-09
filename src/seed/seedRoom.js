@@ -25,7 +25,7 @@ for (let i = 0; i <= 20; i++) {
     room = {
         name: roomNumber,
         roomType: '5edc710a8db3212cf4d3dd10',
-        guests: randGuest
+        maxguests: randGuest
     }
 
     data.push(room)
@@ -43,7 +43,7 @@ for (let i = 0; i <= 10; i++) {
     room = {
         name: roomNumber,
         roomType: '5edb8117ae57ca4730c782c2',
-        guests: randGuest
+        maxguests: randGuest
     }
 
     data.push(room)
@@ -60,7 +60,7 @@ for (let i = 0; i <= 10; i++) {
     room = {
         name: roomNumber,
         roomType: '5edb65db5860f822989b2a81',
-        guests: randGuest
+        maxguests: randGuest
     }
 
     data.push(room);
