@@ -18,11 +18,10 @@ const Joii = Joi.extend(JoiDate)
 | ROUTES
 --------------------------*/
 
-router.post('/', addSchema, add);
+router.post('/',addSchema, add);
 router.get('/', authorize([Role.Admin, Role.User]), getAll);
 router.get('/:id', authorize([Role.Admin, Role.User]), getOne);
-router.put('/:id', authorize([Role.Admin, Role.User]), update);
-router.delete('/:id', authorize([Role.Admin, Role.User]), updateSchema, _delete);
+router.put('/:id', authorize([Role.Admin, Role.User]), updateSchema, update);
 
 
 export default router;
@@ -35,10 +34,11 @@ export default router;
 function addSchema(req, res, next) {
     const schema = Joi.object().keys({
         customerEmail: Joi.string().email().required(),
-        room: JoiObjectId().required(),
+        roomType: JoiObjectId().required(),
+        guests: Joi.number().required(),
         bookingDate: {
-            start: Joii.date().min('now').utc().max(Joi.ref('end')).required(),
-            end: Joii.date().min('now').utc().required()
+            start: Joii.date().min('now').max(Joi.ref('end')).required(),
+            end: Joii.date().min('now').required()
         }
     })
 
@@ -76,14 +76,16 @@ function getOne(req, res, next) {
 }
 
 function updateSchema(req, res, next){
-    const schema = Joi.Object().keys({
-        customerEmail: Joi.string().email().allow('', null),
-        room: JoiObjectId().allow('', null),
-        bookingDate: 
-        {
-            start: Joii.date().utc().allow('', null),
-            end: Joii.date().utc().allow('', null)
-        }
+    
+    const schema = Joi.object().keys({
+        customerEmail: Joi.string().email().required(),
+        roomType: JoiObjectId().required(),
+        guests: Joi.number().required(),
+        bookingDate: {
+            start: Joii.date().min('now').max(Joi.ref('end')).required(),
+            end: Joii.date().min('now').required()
+        },
+        hasEnded: Joi.boolean()
     })
 
     validateRequest(req, next, schema)
@@ -91,12 +93,6 @@ function updateSchema(req, res, next){
 
 function update(req, res, next) {
     bookingService.update(req)
-        .then(booking => res.json(booking))
-        .catch(next)
-}
-
-function _delete(req, res, next) {
-    bookingService._delete(req)
         .then(booking => res.json(booking))
         .catch(next)
 }

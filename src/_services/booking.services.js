@@ -1,19 +1,21 @@
 import Booking from './../models/Booking'
+import RoomType from './../models/RoomType'
 import Room from './../models/Room'
 
 export default {
     add,
     getAll,
     getOne,
-    update,
-    _delete
+    update
 }
 
 async function add(req) {
     let total = await getTotal(req);
     req.body.total = total;
+    
     const booking = await Booking.create(req.body)
-    return booking
+    await bookRoom(booking)
+    // return booking
 }
 
 async function getAll(req) {
@@ -41,15 +43,14 @@ async function getOne(req) {
 }
 
 async function update(req) {
-    const booking = await Booking.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    let total = await getTotal(req)
+    req.body.total = total
 
-    return booking
-}
+    if (req.user.role === 'Admin') {
+        let booking = await Booking.findByIdAndUpdate(req.params.id, req.body, {new: true})
+        return booking
+    }
 
-async function _delete(req) {
-    const booking = await Booking.findByIdAndRemove(req.params.id)
-
-    return booking
 }
 
 async function getTotal(req) {
@@ -59,15 +60,73 @@ async function getTotal(req) {
     let timeDifference = Math.abs(endDate.getTime() - startDate.getTime());
     let nights = Math.ceil(timeDifference/ (1000*3600*24))
 
-    let roomPrice = await Room.findById(req.body.room)
-        .populate({path: 'roomType', model: 'RoomType'})
+    let roomPrice = await RoomType.findById(req.body.roomType)
         .then(res => {
-            return res.roomType.price
+            return res.price
         })
     
     let total = roomPrice * nights;
 
     return total
-
-
 }
+
+async function bookRoom(booking) {
+    const {_id, bookingDate, roomType} = booking
+
+    console.log(booking)
+    //find all available rooms without booking first
+    let rooms =  await Room.find({
+        roomType: roomType, 
+        status: 'Available',
+        $or: 
+        [
+            {bookings: {$exists: false}},
+            {bookings: {$size: 0}},
+            {bookings: null}
+        ]
+    })
+    
+
+    //find all rooms that doesn't clash with booked dates
+    if (!rooms.length) {
+        rooms =  await Room.find({
+            roomType: roomType, 
+            status: 'Available',
+            $nor: 
+            [
+                {  
+                    $and: 
+                    [
+                        
+                        {"bookings.start": { $lte: bookingDate.start }}, 
+                        {"bookings.end": { $gt: bookingDate.start }}
+                        
+                    ]
+    
+                },
+                {
+                    
+                    "bookings.start": { $lt: bookingDate.end, $gte: bookingDate.start }
+                    
+                }
+            ]
+        })
+    }
+
+    console.log(rooms)
+    
+    //add booking to first instance of room in array
+    await Room.findByIdAndUpdate(
+        rooms[0]._id, 
+        {
+            $addToSet: {
+                bookings: {
+                    bookingId: _id,
+                    start: bookingDate.start,
+                    end: bookingDate.end
+                }
+            }
+        }
+    )
+
+}   

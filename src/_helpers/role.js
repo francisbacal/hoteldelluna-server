@@ -1,1 +1,1 @@
-export default {Admin: 'Admin', User: 'User'}
+export default {Admin: 'Admin', Manager: 'Manager', Reception: 'Reception', User: 'User'}

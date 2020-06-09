@@ -22,6 +22,22 @@ const RoomSchema = new Schema(
             ref: 'RoomType',
             required: [true, 'Room Type is required']
         },
+        bookings:[
+            {
+                bookingId: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Booking'
+                },
+                guests: 
+                {
+                    type: Number, 
+                    min: [1, "Number of guests should not be less than 1"],
+                    max: [8, "Number of guests can not exceed 8"]
+                },
+                start: {type: Date},
+                end: {type: Date}
+            }
+        ],
         status:
         {
             type: String,

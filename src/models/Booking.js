@@ -8,10 +8,15 @@ const BookingSchema = new Schema(
             type: String,
             required: [true, 'Email required']
         },
-        room:
+        guests:
+        {
+            type: Number,
+            required: [true, 'Number of guests required.']
+        },
+        roomType:
         {
             type: Schema.Types.ObjectId,
-            ref: 'Room',
+            ref: 'RoomType',
             required: [true, 'Please choose a room']
         },
         bookingDate:
@@ -28,13 +33,17 @@ const BookingSchema = new Schema(
         {
             type: Boolean,
             default: false
+        },
+        isCancelled:
+        {
+            type: Boolean,
+            default: false
         }
     },
     { timestamps: true }
 )
 
 const Booking = mongoose.model('Booking', BookingSchema)
-
 
 BookingSchema.set('toJSON',{
     versionKey: false
