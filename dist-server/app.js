@@ -22,6 +22,8 @@ var _roomTypes = _interopRequireDefault(require("./src/routes/roomTypes"));
 
 var _bookings = _interopRequireDefault(require("./src/routes/bookings"));
 
+var _path = _interopRequireDefault(require("path"));
+
 var port = process.env.PORT || 5000;
 /* ========================
 | DATABASE CONNECTION 
@@ -57,7 +59,7 @@ app.use('/users', _users["default"]);
 app.use('/rooms', _rooms["default"]);
 app.use('/types', _roomTypes["default"]);
 app.use('/bookings', _bookings["default"]);
-app.use('/public', _express["default"]["static"]('../public'));
+app.use('/public', _express["default"]["static"](_path["default"].join(__dirname, '../public')));
 /* ========================
 | ERROR HANDLING
 --------------------------*/

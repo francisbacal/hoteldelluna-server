@@ -46,6 +46,7 @@ var _default = router;
 /* ========================
 | FUNCTIONS
 --------------------------*/
+//add rooms
 
 exports["default"] = _default;
 
@@ -53,7 +54,7 @@ function addSchema(req, res, next) {
   var schema = _joi["default"].object({
     name: _joi["default"].number().required(),
     roomType: _joi["default"].string().required(),
-    maxguests: _joi["default"].Number().required()
+    maxguests: _joi["default"].number().required()
   });
 
   (0, _validateRequest["default"])(req, next, schema);
@@ -121,7 +122,6 @@ function _delete(req, res, next) {
 }
 
 function findRooms(req, res, next) {
-  console.log((0, _moment["default"])(req.params.start, "MM-DD-YYYY"));
   var bookingDate = (0, _moment["default"])(req.params.start, "MM-DD-YYYY").set({
     hour: 14,
     minute: 0,
@@ -129,8 +129,6 @@ function findRooms(req, res, next) {
     millisecond: 0
   });
   var today = (0, _moment["default"])();
-  console.log((0, _moment["default"])(today).isAfter(bookingDate));
-  console.log(today, bookingDate, req.params.start);
 
   if ((0, _moment["default"])(today).isAfter(bookingDate)) {
     res.status(400).send({

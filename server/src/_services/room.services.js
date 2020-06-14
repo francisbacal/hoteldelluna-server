@@ -23,7 +23,7 @@ async function getAll() {
         path: 'bookingId',
         model: 'Booking'
     }
-    const rooms = await Room.find().populate(options);
+    const rooms = await Room.find().populate('bookingId').populate('roomType').exec();
     return rooms;
 }
 
@@ -53,9 +53,10 @@ async function _delete(req) {
 
 async function removeBooking(req) {
     const {id, bookingId} = req.params
+    let ObjectId = require('mongoose').Types.ObjectId
     const room = await Room.findByIdAndUpdate(
         id,
-        { $pull: {bookings: { _id: bookingId } } },
+        { $pull: {bookings: { _id: new ObjectId(bookingId) } } },
         {new: true}
     )
 

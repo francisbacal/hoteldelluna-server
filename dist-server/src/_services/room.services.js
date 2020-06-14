@@ -70,7 +70,7 @@ function _getAll() {
               model: 'Booking'
             };
             _context2.next = 3;
-            return _Room["default"].find().populate(options);
+            return _Room["default"].find().populate('bookingId').populate('roomType').exec();
 
           case 3:
             rooms = _context2.sent;
@@ -182,29 +182,30 @@ function removeBooking(_x7) {
 
 function _removeBooking() {
   _removeBooking = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(req) {
-    var _req$params, id, bookingId, room;
+    var _req$params, id, bookingId, ObjectId, room;
 
     return _regenerator["default"].wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
             _req$params = req.params, id = _req$params.id, bookingId = _req$params.bookingId;
-            _context6.next = 3;
+            ObjectId = require('mongoose').Types.ObjectId;
+            _context6.next = 4;
             return _Room["default"].findByIdAndUpdate(id, {
               $pull: {
                 bookings: {
-                  _id: bookingId
+                  _id: new ObjectId(bookingId)
                 }
               }
             }, {
               "new": true
             });
 
-          case 3:
+          case 4:
             room = _context6.sent;
             return _context6.abrupt("return", room);
 
-          case 5:
+          case 6:
           case "end":
             return _context6.stop();
         }

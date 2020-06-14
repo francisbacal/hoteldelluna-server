@@ -37,6 +37,8 @@ export default router;
 | FUNCTIONS
 --------------------------*/
 
+//add rooms
+
 function addSchema(req,res,next) {
     const schema = Joi.object({
         name: Joi.number().required(),
@@ -115,12 +117,8 @@ function _delete(req, res, next) {
 }
 
 function findRooms(req, res, next) {
-    console.log(moment(req.params.start, "MM-DD-YYYY"))
     let bookingDate = moment(req.params.start, "MM-DD-YYYY").set({hour:14,minute:0,second:0,millisecond:0})
     let today = moment();
-
-    console.log(moment(today).isAfter(bookingDate))
-    console.log(today, bookingDate, req.params.start)
 
     if (moment(today).isAfter(bookingDate)) {
         res.status(400).send({message: 'validationError: Error: No available rooms'})
