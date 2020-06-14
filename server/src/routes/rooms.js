@@ -41,7 +41,7 @@ function addSchema(req,res,next) {
     const schema = Joi.object({
         name: Joi.number().required(),
         roomType: Joi.string().required(),
-        maxguests: Joi.Number().required()
+        maxguests: Joi.number().required()
     });
 
     validateRequest(req, next, schema)
