@@ -1,12 +1,12 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 var _passport = _interopRequireDefault(require("passport"));
 
 var _User = _interopRequireDefault(require("./../models/User"));
 
 var _passportJwt = require("passport-jwt");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var opts = {};
 opts.jwtFromRequest = _passportJwt.ExtractJwt.fromAuthHeaderAsBearerToken();

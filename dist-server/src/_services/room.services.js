@@ -1,19 +1,19 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
 
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
+
 var _Room = _interopRequireDefault(require("../models/Room"));
 
 var _RoomType = _interopRequireDefault(require("../models/RoomType"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var _default = {
   add: add,
@@ -31,9 +31,9 @@ function add(_x, _x2, _x3) {
 }
 
 function _add() {
-  _add = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res, next) {
+  _add = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res, next) {
     var room;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+    return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
@@ -59,9 +59,9 @@ function getAll() {
 }
 
 function _getAll() {
-  _getAll = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+  _getAll = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
     var options, rooms;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+    return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
@@ -91,9 +91,9 @@ function getOne(_x4) {
 }
 
 function _getOne() {
-  _getOne = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(req) {
+  _getOne = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(req) {
     var options, room;
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
@@ -123,9 +123,9 @@ function update(_x5) {
 }
 
 function _update() {
-  _update = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(req) {
+  _update = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(req) {
     var room;
-    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+    return _regenerator["default"].wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
@@ -153,9 +153,9 @@ function _delete(_x6) {
 }
 
 function _delete2() {
-  _delete2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(req) {
+  _delete2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(req) {
     var room;
-    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+    return _regenerator["default"].wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
@@ -181,10 +181,10 @@ function removeBooking(_x7) {
 }
 
 function _removeBooking() {
-  _removeBooking = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(req) {
+  _removeBooking = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(req) {
     var _req$params, id, bookingId, room;
 
-    return regeneratorRuntime.wrap(function _callee6$(_context6) {
+    return _regenerator["default"].wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
@@ -219,9 +219,9 @@ function findRooms(_x8) {
 }
 
 function _findRooms() {
-  _findRooms = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(req) {
+  _findRooms = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(req) {
     var guests, result, allRoomTypes;
-    return regeneratorRuntime.wrap(function _callee7$(_context7) {
+    return _regenerator["default"].wrap(function _callee7$(_context7) {
       while (1) {
         switch (_context7.prev = _context7.next) {
           case 0:
@@ -270,9 +270,9 @@ function asyncForEach(_x9, _x10) {
 }
 
 function _asyncForEach() {
-  _asyncForEach = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(array, callback) {
+  _asyncForEach = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8(array, callback) {
     var index;
-    return regeneratorRuntime.wrap(function _callee8$(_context8) {
+    return _regenerator["default"].wrap(function _callee8$(_context8) {
       while (1) {
         switch (_context8.prev = _context8.next) {
           case 0:
@@ -307,18 +307,18 @@ function getNoBookings(_x11, _x12) {
 }
 
 function _getNoBookings() {
-  _getNoBookings = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(allRoomTypes, guests) {
+  _getNoBookings = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(allRoomTypes, guests) {
     var typeArr;
-    return regeneratorRuntime.wrap(function _callee10$(_context10) {
+    return _regenerator["default"].wrap(function _callee10$(_context10) {
       while (1) {
         switch (_context10.prev = _context10.next) {
           case 0:
             typeArr = [];
             _context10.next = 3;
             return asyncForEach(allRoomTypes, /*#__PURE__*/function () {
-              var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(roomType) {
+              var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(roomType) {
                 var room;
-                return regeneratorRuntime.wrap(function _callee9$(_context9) {
+                return _regenerator["default"].wrap(function _callee9$(_context9) {
                   while (1) {
                     switch (_context9.prev = _context9.next) {
                       case 0:
@@ -383,10 +383,10 @@ function getRoomsWithBookings(_x13, _x14) {
 }
 
 function _getRoomsWithBookings() {
-  _getRoomsWithBookings = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12(allRoomTypes, req) {
+  _getRoomsWithBookings = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee12(allRoomTypes, req) {
     var typeArr, _req$params2, guests, start, end;
 
-    return regeneratorRuntime.wrap(function _callee12$(_context12) {
+    return _regenerator["default"].wrap(function _callee12$(_context12) {
       while (1) {
         switch (_context12.prev = _context12.next) {
           case 0:
@@ -394,9 +394,9 @@ function _getRoomsWithBookings() {
             _req$params2 = req.params, guests = _req$params2.guests, start = _req$params2.start, end = _req$params2.end;
             _context12.next = 4;
             return asyncForEach(allRoomTypes, /*#__PURE__*/function () {
-              var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(roomType) {
+              var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11(roomType) {
                 var room;
-                return regeneratorRuntime.wrap(function _callee11$(_context11) {
+                return _regenerator["default"].wrap(function _callee11$(_context11) {
                   while (1) {
                     switch (_context11.prev = _context11.next) {
                       case 0:

@@ -1,5 +1,11 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
+
+var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
+
 var _express = _interopRequireDefault(require("express"));
 
 var _bodyParser = _interopRequireDefault(require("body-parser"));
@@ -15,22 +21,6 @@ var _users = _interopRequireDefault(require("./src/routes/users"));
 var _roomTypes = _interopRequireDefault(require("./src/routes/roomTypes"));
 
 var _bookings = _interopRequireDefault(require("./src/routes/bookings"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var port = process.env.PORT || 5000;
 /* ========================
@@ -67,7 +57,7 @@ app.use('/users', _users["default"]);
 app.use('/rooms', _rooms["default"]);
 app.use('/types', _roomTypes["default"]);
 app.use('/bookings', _bookings["default"]);
-app.use('/public', _express["default"]["static"](path.join(__dirname, '../public')));
+app.use('/public', _express["default"]["static"]('../public'));
 /* ========================
 | ERROR HANDLING
 --------------------------*/
@@ -83,7 +73,7 @@ var formatError = function formatError(err) {
     var _error$split$map = error.split(':').map(function (e) {
       return e.trim();
     }),
-        _error$split$map2 = _slicedToArray(_error$split$map, 2),
+        _error$split$map2 = (0, _slicedToArray2["default"])(_error$split$map, 2),
         key = _error$split$map2[0],
         value = _error$split$map2[1];
 
@@ -96,7 +86,7 @@ app.use(function (err, req, res, next) {
   console.log('ERROR', err.message);
   console.log('ERROR', err);
 
-  if (_typeof(err) === 'object') {
+  if ((0, _typeof2["default"])(err) === 'object') {
     res.status(400).send({
       error: formatError(err.message)
     });

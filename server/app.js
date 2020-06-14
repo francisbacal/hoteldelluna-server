@@ -49,7 +49,7 @@ app.use('/rooms', rooms);
 app.use('/types', roomTypes);
 app.use('/bookings', bookings);
 
-app.use('/public', express.static(path.join(__dirname, '../public')));
+app.use('/public', express.static('../public'));
 
 
 
