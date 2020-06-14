@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Hotel Del Luna API",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "seed": "babel-node ./src/seed/seedRoom",
     "start": "npm run prod",
