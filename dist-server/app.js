@@ -30,8 +30,16 @@ var port = process.env.PORT || 5000;
 --------------------------*/
 
 /*DEVELOPMENT(LOCAL)*/
+// mongoose.connect('mongodb://localhost:27017/hoteldelluna', 
+//     {
+//         useNewUrlParser: true,
+//         useUnifiedTopology: true,
+//         useCreateIndex: true,
+//         useFindAndModify: false
+//     }
+// );
 
-_mongoose["default"].connect('mongodb://localhost:27017/hoteldelluna', {
+_mongoose["default"].connect(process.env.ATLAS, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
