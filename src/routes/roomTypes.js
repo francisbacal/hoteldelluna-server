@@ -84,6 +84,9 @@ function getAll(req,res,next){
 }
 
 function getOne(req,res,next){
+    if (req.params.id == 'null') {
+        next('Invalid Room Type')
+    }
     roomTypeService.getOne(req.params.id)
         .then(roomType => {
             if (roomType) {

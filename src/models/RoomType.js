@@ -40,7 +40,7 @@ RoomTypeSchema.path('name').validate(async function(v){
    let roomType = await RoomType.findOne({name: this.name})
 
    if (roomType) {
-       this.invalidate('name', 'Room type already exists.')
+       this.invalidate('name', 'Room type already exists!.')
    }
 })
 

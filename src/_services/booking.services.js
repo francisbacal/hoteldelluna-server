@@ -21,7 +21,7 @@ async function add(req) {
 async function getAll(req) {
 
     if (req.user.role === 'Admin') {       
-        const bookings = await Booking.find()
+        const bookings = await Booking.find().populate({path: 'roomType', model: 'RoomType'}).exec()
         return bookings
     } else {
         const bookings = await Booking.find({customerEmail: req.user.email})

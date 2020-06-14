@@ -106,10 +106,12 @@ async function getNoBookings(allRoomTypes, guests) {
                 {bookings: {$size: 0}},
                 {bookings: null}
             ]
-        })
+        }).populate({path: 'roomType', model: 'RoomType'}).exec()
+
+        
 
         if (room) {
-            typeArr.push(room.roomType)
+            typeArr.push(room)
         }
     })
 
@@ -144,10 +146,12 @@ async function getRoomsWithBookings(allRoomTypes, req) {
                     
                 }
             ]
-        })
+        }).populate({path: 'roomType', model: 'RoomType'}).exec()
+
+        
 
         if (room) {
-            typeArr.push(room.roomType)
+            typeArr.push(room)
         }
 
         return typeArr

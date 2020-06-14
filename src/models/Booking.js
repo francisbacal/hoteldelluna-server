@@ -3,10 +3,11 @@ import {Schema} from 'mongoose';
 
 const BookingSchema = new Schema(
     { 
-        customerEmail: 
+        customer: 
         {
-            type: String,
-            required: [true, 'Email required']
+            email: {type: String, required: [true, 'Email is required']},
+            firstname: {type: String, required: [true, 'First Name is required']},
+            lastname: {type: String, required: [true, 'Last Name is required']}
         },
         guests:
         {

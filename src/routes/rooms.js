@@ -2,6 +2,7 @@ import express from 'express';
 import Joi from '@hapi/joi';
 import JoiObjId from 'joi-objectid';
 import JoiDate from '@hapi/joi-date';
+import moment from 'moment';
 
 import authorize from './../_middleware/authorize'
 import validateRequest from './../_middleware/validateRequest'
@@ -114,7 +115,18 @@ function _delete(req, res, next) {
 }
 
 function findRooms(req, res, next) {
-    roomService.findRooms(req)
+    console.log(moment(req.params.start, "MM-DD-YYYY"))
+    let bookingDate = moment(req.params.start, "MM-DD-YYYY").set({hour:14,minute:0,second:0,millisecond:0})
+    let today = moment();
+
+    console.log(moment(today).isAfter(bookingDate))
+    console.log(today, bookingDate, req.params.start)
+
+    if (moment(today).isAfter(bookingDate)) {
+        res.status(400).send({message: 'validationError: Error: No available rooms'})
+    } else {
+        req.params.start = bookingDate
+        roomService.findRooms(req)
         .then(rooms => {
             if (!rooms) {
                 next('No Available rooms')
@@ -123,6 +135,7 @@ function findRooms(req, res, next) {
             }
         })
         .catch(next)
+    }
 }
 
 function removeBooking(req, res, next) {

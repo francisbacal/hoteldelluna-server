@@ -72,6 +72,7 @@ const formatError = (err) => {
 app.use((err, req, res, next)=> 
     {
         console.log('ERROR', err.message)
+        console.log('ERROR', err)
         if (typeof err === 'object') {
             res.status(400).send (
                 {

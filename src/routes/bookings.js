@@ -2,6 +2,7 @@ import express from 'express';
 import Joi from '@hapi/joi';
 import JoiObjId from 'joi-objectid';
 import JoiDate from '@hapi/joi-date';
+import moment from 'moment';
 
 import authorize from './../_middleware/authorize';
 
@@ -32,8 +33,13 @@ export default router;
 --------------------------*/
 
 function addSchema(req, res, next) {
+    const customerSchema = Joi.object().keys({
+        email: Joi.string().email().required(),
+        firstname: Joi.string().required(),
+        lastname: Joi.string().required()
+    })
     const schema = Joi.object().keys({
-        customerEmail: Joi.string().email().required(),
+        customer: customerSchema,
         roomType: JoiObjectId().required(),
         guests: Joi.number().required(),
         bookingDate: {
@@ -76,9 +82,14 @@ function getOne(req, res, next) {
 }
 
 function updateSchema(req, res, next){
+    const customerSchema = Joi.object().keys({
+        email: Joi.string().email().required(),
+        firstname: Join.string().required(),
+        lastname: Joi.string().required()
+    })
     
     const schema = Joi.object().keys({
-        customerEmail: Joi.string().email().required(),
+        customer: Joi.object().keys(customerSchema),
         roomType: JoiObjectId().required(),
         guests: Joi.number().required(),
         bookingDate: {
