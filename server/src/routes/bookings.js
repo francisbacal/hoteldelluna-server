@@ -2,13 +2,12 @@ import express from 'express';
 import Joi from '@hapi/joi';
 import JoiObjId from 'joi-objectid';
 import JoiDate from '@hapi/joi-date';
-import moment from 'moment';
 
 import authorize from './../_middleware/authorize';
 
 import Role from './../_helpers/role';
-import bookingService from './../_services/booking.services'
-import stripesService from './../_services/stripesService'
+import bookingService from './../_services/booking.services';
+import stripeService from './../_services/stripe.services';
 import validateRequest from '../_middleware/validateRequest';
 
 
@@ -24,7 +23,7 @@ router.post('/',addSchema, add);
 router.get('/', authorize([Role.Admin, Role.User]), getAll);
 router.get('/:id', authorize([Role.Admin, Role.User]), getOne);
 router.put('/:id', authorize([Role.Admin, Role.User]), updateSchema, update);
-router.post('/payment', payStripe)
+router.post('/stripe', payStripe)
 
 
 
@@ -112,6 +111,5 @@ function update(req, res, next) {
 }
 
 function payStripe(req, res, next) {
-
-    stripesService.payStripe(req)
+    stripeService.pay(req, res, next).then(payment => console.log(payment)).catch(err => console.log(err))
 }

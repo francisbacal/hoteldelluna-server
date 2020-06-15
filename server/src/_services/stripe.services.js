@@ -1,35 +1,30 @@
-import User from '../models/User';
+import User from './../models/User';
 
-export default {payStripe}
 
-async function payStripe(req, res, next) {
-    
+export default {pay};
+
+
+const stripe = require('stripe')("sk_test_51Gu7VHKS9hT6DeH4tOHmrgjikfxPckP6rDTKRjZfl0ZKwl09W2sjM8kNy1NDekl6N2FGrS00Ayv6AkMz6kIWQ4kc00mD06VjAZ")
+
+
+
+async function pay(req, res) {
     let total = req.body.total;
-
-    if (!req.body.customerId) {
-
-        let {email, firstname, lastname} = req.body
-
-        let randomString = Math.random().toString(36).substring(12);
-        const password = randomString
-        const confirmPassword = randomString
-
-        let registerDetails = {
-            email,
-            firstname,
-            lastname,
-            password,
-            confirmPassword
-        }
-
-       let customer = await User.create(req.body).then(user => res.send(user)).catch(next)
-
-       req.body.customerId = customer._id
-    }
-
-    let response = User.findOne({ _id: req.body.customerId })
+    User.findOne({ _id: req.body.customerId })
         .then(user => {
-            
+            if (!user) {
+                stripe.charges.create({
+                    amount: total * 100,
+                    currency: 'usd',
+                    customer: user.stripeCustomerId
+                })
+                    .then(charge => {
+                        res.send(charge)
+                    })
+                    .catch(err => {
+                        res.send(err)
+                    })
+            } else {
                 if (!user.stripeCustomerId) {
                     // create customer to stripe
                     stripe.customers.create({ email: user.email })
@@ -74,6 +69,4 @@ async function payStripe(req, res, next) {
                 }
             }
         })
-
-    return response
 }

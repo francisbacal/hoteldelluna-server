@@ -15,13 +15,13 @@ var _joiObjectid = _interopRequireDefault(require("joi-objectid"));
 
 var _joiDate = _interopRequireDefault(require("@hapi/joi-date"));
 
-var _moment = _interopRequireDefault(require("moment"));
-
 var _authorize = _interopRequireDefault(require("./../_middleware/authorize"));
 
 var _role = _interopRequireDefault(require("./../_helpers/role"));
 
 var _booking = _interopRequireDefault(require("./../_services/booking.services"));
+
+var _stripe = _interopRequireDefault(require("./../_services/stripe.services"));
 
 var _validateRequest = _interopRequireDefault(require("../_middleware/validateRequest"));
 
@@ -39,6 +39,7 @@ router.post('/', addSchema, add);
 router.get('/', (0, _authorize["default"])([_role["default"].Admin, _role["default"].User]), getAll);
 router.get('/:id', (0, _authorize["default"])([_role["default"].Admin, _role["default"].User]), getOne);
 router.put('/:id', (0, _authorize["default"])([_role["default"].Admin, _role["default"].User]), updateSchema, update);
+router.post('/stripe', payStripe);
 var _default = router;
 /* ========================
 | FUNCTIONS
@@ -117,4 +118,12 @@ function update(req, res, next) {
   _booking["default"].update(req).then(function (booking) {
     return res.json(booking);
   })["catch"](next);
+}
+
+function payStripe(req, res, next) {
+  _stripe["default"].pay(req, res, next).then(function (payment) {
+    return console.log(payment);
+  })["catch"](function (err) {
+    return console.log(err);
+  });
 }

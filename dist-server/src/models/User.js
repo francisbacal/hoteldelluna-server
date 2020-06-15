@@ -41,6 +41,9 @@ var UserSchema = new _mongoose.Schema({
   role: {
     type: String,
     "default": 'User'
+  },
+  stripeCustomerId: {
+    type: String
   }
 });
 

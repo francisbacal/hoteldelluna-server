@@ -33,6 +33,10 @@ const UserSchema = new Schema(
         {
             type: String,
             default: 'User'
+        },
+        stripeCustomerId:
+        {
+            type: String
         }
     }
 );

@@ -33,7 +33,15 @@ var port = process.env.PORT || 5000;
 
 /*DEVELOPMENT(LOCAL)*/
 
-_mongoose["default"].connect('mongodb://localhost:27017/hoteldelluna', {
+var URI;
+
+if (process.env.NODE_ENV === 'development') {
+  URI = 'mongodb://localhost:27017/hoteldelluna';
+} else {
+  URI = process.env.ATLAS;
+}
+
+_mongoose["default"].connect(URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
