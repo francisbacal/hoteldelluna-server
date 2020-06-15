@@ -6,17 +6,16 @@ var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"))
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
-var _Room = _interopRequireDefault(require("./../models/Room"));
+var Room = require("../models/Room");
 
-var _mongoose = _interopRequireDefault(require("mongoose"));
+var mongoose = require("mongoose");
 
-_mongoose["default"].connect('mongodb://localhost:27017/hoteldelluna', {
+mongoose.connect(process.env.ATLAS, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
   useFindAndModify: false
 });
-
 deleteRooms();
 var data = [];
 
@@ -69,8 +68,7 @@ for (var _i2 = 0; _i2 <= 10; _i2++) {
 
 
 console.log(data);
-
-_Room["default"].create(data, function (err, resp) {
+Room.create(data, function (err, resp) {
   if (err) {
     console.log(err);
   } else {
@@ -90,7 +88,7 @@ function _deleteRooms() {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return _Room["default"].deleteMany({});
+            return Room.deleteMany({});
 
           case 2:
             rooms = _context.sent;

@@ -1,14 +1,16 @@
-import Room from './../models/Room'
-import mongoose from 'mongoose';
+const Room = require("../models/Room");
+const mongoose = require("mongoose");
 
-mongoose.connect('mongodb://localhost:27017/hoteldelluna', 
+mongoose.connect(process.env.ATLAS, 
     {
-        useNewUrlParser: true,
+        useNewUrlParser: true, 
         useUnifiedTopology: true,
         useCreateIndex: true,
-        useFindAndModify: false
+        useFindAndModify: false,
     }
+
 );
+
 
 deleteRooms();
 
