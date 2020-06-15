@@ -25,6 +25,8 @@ router.get('/:id', authorize([Role.Admin, Role.User]), getOne);
 router.put('/:id', authorize([Role.Admin, Role.User]), updateSchema, update);
 
 
+
+
 export default router;
 
 
