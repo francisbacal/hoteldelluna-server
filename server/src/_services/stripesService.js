@@ -1,12 +1,35 @@
-router.post('/stripe', (req, res, next) => {
-    // total
-    // customerId
+import User from '../models/User';
+
+export default {payStripe}
+
+async function payStripe(req, res, next) {
+    
     let total = req.body.total;
-    User.findOne({ _id: req.body.customerId })
+
+    if (!req.body.customerId) {
+
+        let {email, firstname, lastname} = req.body
+
+        let randomString = Math.random().toString(36).substring(12);
+        const password = randomString
+        const confirmPassword = randomString
+
+        let registerDetails = {
+            email,
+            firstname,
+            lastname,
+            password,
+            confirmPassword
+        }
+
+       let customer = await User.create(req.body).then(user => res.send(user)).catch(next)
+
+       req.body.customerId = customer._id
+    }
+
+    let response = User.findOne({ _id: req.body.customerId })
         .then(user => {
-            if (!user) {
-                res.status(500).send({ message: "Incomplete" })
-            } else {
+            
                 if (!user.stripeCustomerId) {
                     // create customer to stripe
                     stripe.customers.create({ email: user.email })
@@ -51,4 +74,6 @@ router.post('/stripe', (req, res, next) => {
                 }
             }
         })
-})
+
+    return response
+}

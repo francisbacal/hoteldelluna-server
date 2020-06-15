@@ -8,6 +8,7 @@ import authorize from './../_middleware/authorize';
 
 import Role from './../_helpers/role';
 import bookingService from './../_services/booking.services'
+import stripesService from './../_services/stripesService'
 import validateRequest from '../_middleware/validateRequest';
 
 
@@ -23,7 +24,7 @@ router.post('/',addSchema, add);
 router.get('/', authorize([Role.Admin, Role.User]), getAll);
 router.get('/:id', authorize([Role.Admin, Role.User]), getOne);
 router.put('/:id', authorize([Role.Admin, Role.User]), updateSchema, update);
-
+router.post('/payment', payStripe)
 
 
 
@@ -108,4 +109,9 @@ function update(req, res, next) {
     bookingService.update(req)
         .then(booking => res.json(booking))
         .catch(next)
+}
+
+function payStripe(req, res, next) {
+
+    stripesService.payStripe(req)
 }
