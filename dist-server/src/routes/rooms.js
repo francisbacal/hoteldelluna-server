@@ -128,8 +128,7 @@ function findRooms(req, res, next) {
     second: 0,
     millisecond: 0
   });
-  console.log('bookingdate', req.params.start);
-  console.log('isAfter', (0, _moment["default"])().isAfter(bookingDate));
+  console.log(bookingDate);
   console.log((0, _moment["default"])());
 
   if ((0, _moment["default"])().isAfter(bookingDate)) {
