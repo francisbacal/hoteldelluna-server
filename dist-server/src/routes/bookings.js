@@ -35,11 +35,11 @@ var Joii = _joi["default"].extend(_joiDate["default"]);
 --------------------------*/
 
 
-router.post('/', addSchema, add);
+router.post('/', addSchema, payStripe, add);
 router.get('/', (0, _authorize["default"])([_role["default"].Admin, _role["default"].User]), getAll);
 router.get('/:id', (0, _authorize["default"])([_role["default"].Admin, _role["default"].User]), getOne);
-router.put('/:id', (0, _authorize["default"])([_role["default"].Admin, _role["default"].User]), updateSchema, update);
-router.post('/stripe', payStripe);
+router.put('/:id', (0, _authorize["default"])([_role["default"].Admin, _role["default"].User]), updateSchema, update); // router.post('/stripe', payStripe)
+
 var _default = router;
 /* ========================
 | FUNCTIONS
@@ -122,8 +122,7 @@ function update(req, res, next) {
 
 function payStripe(req, res, next) {
   _stripe["default"].pay(req, res, next).then(function (payment) {
-    return console.log(payment);
-  })["catch"](function (err) {
-    return console.log(err);
-  });
+    console.log("payment", payment);
+    res.json(payment);
+  })["catch"](next);
 }

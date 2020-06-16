@@ -128,12 +128,9 @@ function findRooms(req, res, next) {
     second: 0,
     millisecond: 0
   });
-  var today = (0, _moment["default"])();
 
-  if ((0, _moment["default"])(today).isAfter(bookingDate)) {
-    res.status(400).send({
-      message: 'validationError: Error: No available rooms'
-    });
+  if ((0, _moment["default"])().isAfter(bookingDate)) {
+    return next('Sorry you can not checkin after 2pm today'); // res.status(400).send({message: 'validationError: Error: No available rooms'})
   } else {
     req.params.start = bookingDate;
 

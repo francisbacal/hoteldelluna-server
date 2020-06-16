@@ -118,10 +118,10 @@ function _delete(req, res, next) {
 
 function findRooms(req, res, next) {
     let bookingDate = moment(req.params.start, "MM-DD-YYYY").set({hour:14,minute:0,second:0,millisecond:0})
-    let today = moment();
-
-    if (moment(today).isAfter(bookingDate)) {
-        res.status(400).send({message: 'validationError: Error: No available rooms'})
+    
+    if (moment().isAfter(bookingDate)) {
+        return next('Sorry you can not checkin after 2pm today')
+        // res.status(400).send({message: 'validationError: Error: No available rooms'})
     } else {
         req.params.start = bookingDate
         roomService.findRooms(req)

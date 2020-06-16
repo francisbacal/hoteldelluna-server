@@ -19,11 +19,11 @@ const Joii = Joi.extend(JoiDate)
 | ROUTES
 --------------------------*/
 
-router.post('/',addSchema, add);
+router.post('/',addSchema, payStripe, add);
 router.get('/', authorize([Role.Admin, Role.User]), getAll);
 router.get('/:id', authorize([Role.Admin, Role.User]), getOne);
 router.put('/:id', authorize([Role.Admin, Role.User]), updateSchema, update);
-router.post('/stripe', payStripe)
+// router.post('/stripe', payStripe)
 
 
 
@@ -111,5 +111,5 @@ function update(req, res, next) {
 }
 
 function payStripe(req, res, next) {
-    stripeService.pay(req, res, next).then(payment => console.log(payment)).catch(err => console.log(err))
+    stripeService.pay(req, res, next).then(payment => {console.log("payment", payment); res.json(payment)}).catch(next)
 }
