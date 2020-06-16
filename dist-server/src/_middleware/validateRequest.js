@@ -24,7 +24,10 @@ function validateRequest(req, next, schema) {
     }).join(', '));
     next(err);
   } else {
-    req.body = value;
+    for (var key in value) {
+      req.body.key = value[key];
+    }
+
     next();
   }
 }

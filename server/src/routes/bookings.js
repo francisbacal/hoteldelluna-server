@@ -53,10 +53,18 @@ function addSchema(req, res, next) {
     validateRequest(req, next, schema);
 }
 
-function add(req, res, next) {
-    bookingService.add(req)
-        .then(booking => res.json(booking))
+async function add(req, res, next) {
+    let booking = await bookingService.add(req)
         .catch(next)
+    
+    let bookingDetails = {booking: booking, payment: req.body.payment}
+    
+    
+    console.log(bookingDetails)
+   
+
+    res.json(bookingDetails);
+
 }
 
 function getAll(req, res, next) {
@@ -110,6 +118,7 @@ function update(req, res, next) {
         .catch(next)
 }
 
-function payStripe(req, res, next) {
-    stripeService.pay(req, res, next).then(payment => {console.log("payment", payment); res.json(payment)}).catch(next)
+async function payStripe(req, res, next) {
+    req.body.payment = await stripeService.pay(req, res, next).catch(next)
+    next()
 }

@@ -11,7 +11,9 @@ function validateRequest(req, next, schema) {
         const err = `${error.details.map(err => err.message).join(', ')}`
         next(err);
     } else {
-        req.body = value;
+        for (let key in value) {
+            req.body.key = value[key]
+        }
         next()
     }
 }

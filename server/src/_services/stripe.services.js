@@ -16,12 +16,10 @@ async function pay(req, res, next) {
         return result;
     }
 
-    let total = req.body.total;
+    let total = req.body.total * 0.10;
     let bookingDetails = req.body.customer
-    console.log('req.body', req.body.customerId)
 
     if (!req.body.customerId) {
-        console.log('no existing user for', bookingDetails.email)
         let password = randomString(8, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
         let confirmPassword = password;
 
@@ -33,76 +31,47 @@ async function pay(req, res, next) {
             confirmPassword
         }
 
-        let userCreated = await User.create(details);
+        let userCreated = await User.create(details).catch(next);
+
         req.body.customerId = await userCreated._id
 
     }
+    const user = await User.findOne({ _id: req.body.customerId })
 
-    console.log(error)
+    if (!user) {
+        res.status(500).send({ message: "Incomplete" })
+    } else {
+        if (!user.stripeCustomerId) {
+            let charge = await stripe.customers.create({ email: user.email })
+            .then(customer => {
+                return User.findByIdAndUpdate({ _id: user._id }, { stripeCustomerId: customer.id }, { new: true })
+            })
+            .then(user => {
+                return stripe.customers.retrieve(user.stripeCustomerId)
+            })
+            .then(customer => {
+                return stripe.customers.createSource(customer.id, {
+                    source: 'tok_visa'
+                })
+            })
+            .then(source => {
+                return stripe.charges.create({
+                    amount: total * 100,
+                    currency: 'usd',
+                    customer: source.customer
+                })
+            })
+            return charge
+        } else {
+            let charge = await stripe.charges.create({
+                amount: total * 100,
+                currency: 'usd',
+                customer: user.stripeCustomerId
+            })
 
-    //     stripe.customer.create({ email: bookingDetails.email })
-    //         .then(customer =>{
-    //             console.log('creating user...')
-    //             return User.create({...details, stripeCustomerId: customer.id})
-    //         })
-    //         .then(user => {
-    //             req.body.customerId = user._id
-    //             return stripe.customers.retrieve(user.stripeCustomerId)
-    //         })
-    //         .then(customer => {
-    //             return stripe.customers.createSource(customer.id, {
-    //                 source: 'tok_visa'
-    //             })
-    //         })
-    //         .then(source => {
-    //             return stripe.charges.create({
-    //                 amount: total * 100,
-    //                 currency: 'usd',
-    //                 customer: source.customer
-    //             })
-    //         })
-    //         .then(charge => {
-    //             // new charge created on a new customer
-    //             res.send(charge)
-    //         })
-    //         .catch(err => {
-    //             res.send(err)
-    //         })
+            return charge
 
-    User.findOne({ _id: req.body.customerId })
-        .then(user => {
-            if (!user) {
-                res.status(500).send({ message: "Incomplete" })        
-            } else {
-                if (!user.stripeCustomerId) {
-                    // create customer to stripe
-                    stripe.customers.create({ email: user.email })
-                        .then(customer => {
-                            return User.findByIdAndUpdate({ _id: user._id }, { stripeCustomerId: customer.id }, { new: true })
-                        })
-                        .then(user => {
-                            return stripe.customers.retrieve(user.stripeCustomerId)
-                        })
-                        .then(customer => {
-                            return stripe.customers.createSource(customer.id, {
-                                source: 'tok_visa'
-                            })
-                        })
-                        .then(source => {
-                            console.log(total)
-                            return stripe.charges.create({
-                                amount: total * 100,
-                                currency: 'usd',
-                                customer: source.customer
-                            })
-                        })
-                } else {
-                    stripe.charges.create({
-                        amount: total * 100,
-                        currency: 'usd',
-                        customer: user.stripeCustomerId
-                    })     
-                }
-            }
-        })
+        }
+    }
+ 
 }

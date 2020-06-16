@@ -118,12 +118,8 @@ function _delete(req, res, next) {
 
 function findRooms(req, res, next) {
     let bookingDate = moment(req.params.start, "MM-DD-YYYY").set({hour:14,minute:0,second:0,millisecond:0})
-
-    console.log(bookingDate)
-    console.log(moment())
     
     if (moment().isAfter(bookingDate)) {
-        console.log('YES AFTER')
         return next('Sorry you can not checkin after 2pm today')
     } else {
         req.params.start = bookingDate

@@ -1,6 +1,7 @@
-import Booking from './../models/Booking'
-import RoomType from './../models/RoomType'
-import Room from './../models/Room'
+import Booking from './../models/Booking';
+import RoomType from './../models/RoomType';
+import Room from './../models/Room';
+import moment from 'moment'
 
 export default {
     add,
@@ -54,10 +55,10 @@ async function update(req) {
 }
 
 async function getTotal(req) {
-    let startDate = req.body.bookingDate.start;
-    let endDate = req.body.bookingDate.end;
+    let startDate = moment(req.body.bookingDate.start);
+    let endDate = moment(req.body.bookingDate.end);
 
-    let timeDifference = Math.abs(endDate.getTime() - startDate.getTime());
+    let timeDifference = Math.abs(endDate.valueOf() - startDate.valueOf());
     let nights = Math.ceil(timeDifference/ (1000*3600*24))
 
     let roomPrice = await RoomType.findById(req.body.roomType)
@@ -65,7 +66,7 @@ async function getTotal(req) {
             return res.price
         })
     
-    let total = roomPrice * nights;
+    let total = roomPrice * nights * 0.10;
 
     return total
 }
@@ -88,7 +89,7 @@ async function bookRoom(booking) {
     
 
     //find a room that doesn't clash with booked dates
-    if (!room.length) {
+    if (!room.length || !room) {
         room =  await Room.findOne({
             roomType: roomType, 
             status: 'Available',

@@ -26,7 +26,8 @@ function pay(_x, _x2, _x3) {
 
 function _pay() {
   _pay = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res, next) {
-    var randomString, total, bookingDetails, password, confirmPassword, details, userCreated;
+    var randomString, total, bookingDetails, password, confirmPassword, details, userCreated, user, charge, _charge;
+
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -41,16 +42,14 @@ function _pay() {
               return result;
             };
 
-            total = req.body.total;
+            total = req.body.total * 0.10;
             bookingDetails = req.body.customer;
-            console.log('req.body', req.body.customerId);
 
             if (req.body.customerId) {
-              _context.next = 15;
+              _context.next = 13;
               break;
             }
 
-            console.log('no existing user for', bookingDetails.email);
             password = randomString(8, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
             confirmPassword = password;
             details = {
@@ -60,92 +59,85 @@ function _pay() {
               password: password,
               confirmPassword: confirmPassword
             };
-            _context.next = 11;
-            return _User["default"].create(details);
+            _context.next = 9;
+            return _User["default"].create(details)["catch"](next);
 
-          case 11:
+          case 9:
             userCreated = _context.sent;
-            _context.next = 14;
+            _context.next = 12;
             return userCreated._id;
 
-          case 14:
+          case 12:
             req.body.customerId = _context.sent;
 
-          case 15:
-            console.log(error); //     stripe.customer.create({ email: bookingDetails.email })
-            //         .then(customer =>{
-            //             console.log('creating user...')
-            //             return User.create({...details, stripeCustomerId: customer.id})
-            //         })
-            //         .then(user => {
-            //             req.body.customerId = user._id
-            //             return stripe.customers.retrieve(user.stripeCustomerId)
-            //         })
-            //         .then(customer => {
-            //             return stripe.customers.createSource(customer.id, {
-            //                 source: 'tok_visa'
-            //             })
-            //         })
-            //         .then(source => {
-            //             return stripe.charges.create({
-            //                 amount: total * 100,
-            //                 currency: 'usd',
-            //                 customer: source.customer
-            //             })
-            //         })
-            //         .then(charge => {
-            //             // new charge created on a new customer
-            //             res.send(charge)
-            //         })
-            //         .catch(err => {
-            //             res.send(err)
-            //         })
-
-            _User["default"].findOne({
+          case 13:
+            _context.next = 15;
+            return _User["default"].findOne({
               _id: req.body.customerId
-            }).then(function (user) {
-              if (!user) {
-                res.status(500).send({
-                  message: "Incomplete"
-                });
-              } else {
-                if (!user.stripeCustomerId) {
-                  // create customer to stripe
-                  stripe.customers.create({
-                    email: user.email
-                  }).then(function (customer) {
-                    return _User["default"].findByIdAndUpdate({
-                      _id: user._id
-                    }, {
-                      stripeCustomerId: customer.id
-                    }, {
-                      "new": true
-                    });
-                  }).then(function (user) {
-                    return stripe.customers.retrieve(user.stripeCustomerId);
-                  }).then(function (customer) {
-                    return stripe.customers.createSource(customer.id, {
-                      source: 'tok_visa'
-                    });
-                  }).then(function (source) {
-                    console.log(total);
-                    return stripe.charges.create({
-                      amount: total * 100,
-                      currency: 'usd',
-                      customer: source.customer
-                    });
-                  });
-                } else {
-                  stripe.charges.create({
-                    amount: total * 100,
-                    currency: 'usd',
-                    customer: user.stripeCustomerId
-                  });
-                }
-              }
             });
 
-          case 17:
+          case 15:
+            user = _context.sent;
+
+            if (user) {
+              _context.next = 20;
+              break;
+            }
+
+            res.status(500).send({
+              message: "Incomplete"
+            });
+            _context.next = 31;
+            break;
+
+          case 20:
+            if (user.stripeCustomerId) {
+              _context.next = 27;
+              break;
+            }
+
+            _context.next = 23;
+            return stripe.customers.create({
+              email: user.email
+            }).then(function (customer) {
+              return _User["default"].findByIdAndUpdate({
+                _id: user._id
+              }, {
+                stripeCustomerId: customer.id
+              }, {
+                "new": true
+              });
+            }).then(function (user) {
+              return stripe.customers.retrieve(user.stripeCustomerId);
+            }).then(function (customer) {
+              return stripe.customers.createSource(customer.id, {
+                source: 'tok_visa'
+              });
+            }).then(function (source) {
+              return stripe.charges.create({
+                amount: total * 100,
+                currency: 'usd',
+                customer: source.customer
+              });
+            });
+
+          case 23:
+            charge = _context.sent;
+            return _context.abrupt("return", charge);
+
+          case 27:
+            _context.next = 29;
+            return stripe.charges.create({
+              amount: total * 100,
+              currency: 'usd',
+              customer: user.stripeCustomerId
+            });
+
+          case 29:
+            _charge = _context.sent;
+            return _context.abrupt("return", _charge);
+
+          case 31:
           case "end":
             return _context.stop();
         }

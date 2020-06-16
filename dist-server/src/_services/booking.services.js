@@ -17,6 +17,8 @@ var _RoomType = _interopRequireDefault(require("./../models/RoomType"));
 
 var _Room = _interopRequireDefault(require("./../models/Room"));
 
+var _moment = _interopRequireDefault(require("moment"));
+
 var _default = {
   add: add,
   getAll: getAll,
@@ -210,9 +212,9 @@ function _getTotal() {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
-            startDate = req.body.bookingDate.start;
-            endDate = req.body.bookingDate.end;
-            timeDifference = Math.abs(endDate.getTime() - startDate.getTime());
+            startDate = (0, _moment["default"])(req.body.bookingDate.start);
+            endDate = (0, _moment["default"])(req.body.bookingDate.end);
+            timeDifference = Math.abs(endDate.valueOf() - startDate.valueOf());
             nights = Math.ceil(timeDifference / (1000 * 3600 * 24));
             _context5.next = 6;
             return _RoomType["default"].findById(req.body.roomType).then(function (res) {
@@ -221,7 +223,7 @@ function _getTotal() {
 
           case 6:
             roomPrice = _context5.sent;
-            total = roomPrice * nights;
+            total = roomPrice * nights * 0.10;
             return _context5.abrupt("return", total);
 
           case 9:
@@ -271,7 +273,7 @@ function _bookRoom() {
           case 3:
             room = _context6.sent;
 
-            if (room.length) {
+            if (!(!room.length || !room)) {
               _context6.next = 8;
               break;
             }
