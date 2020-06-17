@@ -36,8 +36,8 @@ async function pay(req, res, next) {
         req.body.customerId = await userCreated._id
 
     }
-    const user = await User.findOne({ _id: req.body.customerId })
 
+    const user = await User.findOne({ _id: req.body.customerId })
     if (!user) {
         res.status(500).send({ message: "Incomplete" })
     } else {
