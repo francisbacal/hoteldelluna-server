@@ -7,7 +7,8 @@ export default {
     add,
     getAll,
     getOne,
-    update
+    update,
+    removeRoomBooking
 }
 
 async function add(req) {
@@ -49,6 +50,7 @@ async function update(req) {
 
     if (req.user.role === 'Admin') {
         let booking = await Booking.findByIdAndUpdate(req.params.id, req.body, {new: true})
+        await bookRoom(booking)
         return booking
     }
 
@@ -70,10 +72,20 @@ async function getTotal(req) {
 
     return total
 }
+async function removeRoomBooking(req) {
+    const {id} = req.params
+    let ObjectId = require('mongoose').Types.ObjectId
+    const room = await Room.findOneAndUpdate(
+        {bookings: { bookingId: new ObjectId(id)}},
+        { $pull: {bookings: { bookingId: new ObjectId(id) } } },
+        {new: true}
+    )
+
+    return room
+}
 
 async function bookRoom(booking) {
     const {_id, bookingDate, roomType, guests} = booking
-
     //find a room without booking first
     let room =  await Room.findOne({ 
         roomType: roomType, 
@@ -89,7 +101,7 @@ async function bookRoom(booking) {
     
 
     //find a room that doesn't clash with booked dates
-    if (!room.length || !room) {
+    if (room !== null || !room.length || !room) {
         room =  await Room.findOne({
             roomType: roomType, 
             status: 'Available',
@@ -114,7 +126,6 @@ async function bookRoom(booking) {
             ]
         })
     }
-    
     //add booking to Room
     await Room.findByIdAndUpdate(
         room._id, 

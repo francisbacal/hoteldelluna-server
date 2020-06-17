@@ -42,7 +42,7 @@ var Joii = _joi["default"].extend(_joiDate["default"]);
 router.post('/', addSchema, payStripe, add);
 router.get('/', (0, _authorize["default"])([_role["default"].Admin, _role["default"].User]), getAll);
 router.get('/:id', (0, _authorize["default"])([_role["default"].Admin, _role["default"].User]), getOne);
-router.put('/:id', (0, _authorize["default"])([_role["default"].Admin, _role["default"].User]), updateSchema, update); // router.post('/stripe', payStripe)
+router.put('/:id', (0, _authorize["default"])([_role["default"].Admin, _role["default"].User]), updateSchema, removeRoomBooking, update); // router.post('/stripe', payStripe)
 
 var _default = router;
 /* ========================
@@ -91,10 +91,9 @@ function _add() {
               booking: booking,
               payment: req.body.payment
             };
-            console.log(bookingDetails);
             res.json(bookingDetails);
 
-          case 6:
+          case 5:
           case "end":
             return _context.stop();
         }
@@ -125,14 +124,12 @@ function getOne(req, res, next) {
 }
 
 function updateSchema(req, res, next) {
-  var customerSchema = _joi["default"].object().keys({
-    email: _joi["default"].string().email().required(),
-    firstname: Join.string().required(),
-    lastname: _joi["default"].string().required()
-  });
-
   var schema = _joi["default"].object().keys({
-    customer: _joi["default"].object().keys(customerSchema),
+    customer: _joi["default"].object().keys({
+      email: _joi["default"].string().email().required(),
+      firstname: _joi["default"].string().required(),
+      lastname: _joi["default"].string().required()
+    }),
     roomType: JoiObjectId().required(),
     guests: _joi["default"].number().required(),
     bookingDate: {
@@ -149,6 +146,12 @@ function update(req, res, next) {
   _booking["default"].update(req).then(function (booking) {
     return res.json(booking);
   })["catch"](next);
+}
+
+function removeRoomBooking(req, res, next) {
+  _booking["default"].removeRoomBooking(req)["catch"](next);
+
+  next();
 }
 
 function payStripe(_x4, _x5, _x6) {

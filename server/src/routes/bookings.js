@@ -22,7 +22,7 @@ const Joii = Joi.extend(JoiDate)
 router.post('/',addSchema, payStripe, add);
 router.get('/', authorize([Role.Admin, Role.User]), getAll);
 router.get('/:id', authorize([Role.Admin, Role.User]), getOne);
-router.put('/:id', authorize([Role.Admin, Role.User]), updateSchema, update);
+router.put('/:id', authorize([Role.Admin, Role.User]), updateSchema, removeRoomBooking, update);
 // router.post('/stripe', payStripe)
 
 
@@ -59,9 +59,6 @@ async function add(req, res, next) {
     
     let bookingDetails = {booking: booking, payment: req.body.payment}
     
-    
-    console.log(bookingDetails)
-   
 
     res.json(bookingDetails);
 
@@ -92,14 +89,13 @@ function getOne(req, res, next) {
 }
 
 function updateSchema(req, res, next){
-    const customerSchema = Joi.object().keys({
-        email: Joi.string().email().required(),
-        firstname: Join.string().required(),
-        lastname: Joi.string().required()
-    })
-    
+
     const schema = Joi.object().keys({
-        customer: Joi.object().keys(customerSchema),
+        customer: Joi.object().keys({
+            email: Joi.string().email().required(),
+            firstname: Joi.string().required(),
+            lastname: Joi.string().required()
+        }),
         roomType: JoiObjectId().required(),
         guests: Joi.number().required(),
         bookingDate: {
@@ -116,6 +112,12 @@ function update(req, res, next) {
     bookingService.update(req)
         .then(booking => res.json(booking))
         .catch(next)
+}
+function removeRoomBooking(req, res, next) {
+    bookingService.removeRoomBooking(req)
+        .catch(next)
+    
+        next();
 }
 
 async function payStripe(req, res, next) {
