@@ -15,7 +15,10 @@
     "watch:dev": "nodemon",
     "test": "jest"
   },
-  "nodemonConfig": {
+    "babel": {
+        "plugins": ["@babel/plugin-transform-runtime"]
+    },
+    "nodemonConfig": {
     "exec": "npm run dev",
     "watch": [
       "server/*",
