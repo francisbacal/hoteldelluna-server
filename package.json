@@ -16,6 +16,9 @@
     "test": "jest"
   },
     "babel": {
+        "presets": [
+            "@babel/preset-env"
+        ],
         "plugins": ["@babel/plugin-transform-runtime"]
     },
     "nodemonConfig": {
