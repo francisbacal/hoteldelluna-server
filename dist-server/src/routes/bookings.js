@@ -143,7 +143,7 @@ function updateSchema(req, res, next) {
 }
 
 function update(req, res, next) {
-  _booking["default"].update(req).then(function (booking) {
+  _booking["default"].update(req, next).then(function (booking) {
     return res.json(booking);
   })["catch"](next);
 }

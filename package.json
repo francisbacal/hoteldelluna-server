@@ -16,7 +16,7 @@
     "test": "jest"
   },
   "nodemonConfig": {
-    "exec": "npm run dev",
+    "exec": "npm run prod",
     "watch": [
       "server/*",
       "public/*"

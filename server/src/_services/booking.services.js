@@ -44,13 +44,13 @@ async function getOne(req) {
     }
 }
 
-async function update(req) {
+async function update(req, next) {
     let total = await getTotal(req)
     req.body.total = total
 
     if (req.user.role === 'Admin') {
         let booking = await Booking.findByIdAndUpdate(req.params.id, req.body, {new: true})
-        await bookRoom(booking)
+        await bookRoom(booking, next)
         return booking
     }
 
@@ -76,19 +76,18 @@ async function removeRoomBooking(req) {
     const {id} = req.params
     let ObjectId = require('mongoose').Types.ObjectId
     const room = await Room.findOneAndUpdate(
-        {bookings: { bookingId: new ObjectId(id)}},
+        {"bookings.bookingId": new ObjectId(id)},
         { $pull: {bookings: { bookingId: new ObjectId(id) } } },
         {new: true}
     )
-
-    return room
 }
 
-async function bookRoom(booking) {
+async function bookRoom(booking, next) {
     const {_id, bookingDate, roomType, guests} = booking
+    let ObjectId = require('mongoose').Types.ObjectId
     //find a room without booking first
     let room =  await Room.findOne({ 
-        roomType: roomType, 
+        roomType: new ObjectId(roomType), 
         status: 'Available',
         maxguests: {$gte: parseInt(guests)},
         $or: 
@@ -98,10 +97,11 @@ async function bookRoom(booking) {
             {bookings: null}
         ]
     })
+
     
 
     //find a room that doesn't clash with booked dates
-    if (room !== null || !room.length || !room) {
+    if (room === null || !room.length || !room) {
         room =  await Room.findOne({
             roomType: roomType, 
             status: 'Available',
@@ -126,7 +126,6 @@ async function bookRoom(booking) {
             ]
         })
     }
-    //add booking to Room
     await Room.findByIdAndUpdate(
         room._id, 
         {
@@ -138,5 +137,6 @@ async function bookRoom(booking) {
                 }
             }
         }
-    )
+    ).catch(next)
+
 }   

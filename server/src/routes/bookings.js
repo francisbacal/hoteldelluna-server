@@ -109,7 +109,7 @@ function updateSchema(req, res, next){
 }
 
 function update(req, res, next) {
-    bookingService.update(req)
+    bookingService.update(req, next)
         .then(booking => res.json(booking))
         .catch(next)
 }
