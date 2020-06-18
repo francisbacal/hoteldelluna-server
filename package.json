@@ -16,7 +16,7 @@
     "test": "jest"
   },
   "nodemonConfig": {
-    "exec": "npm run prod",
+    "exec": "npm run dev",
     "watch": [
       "server/*",
       "public/*"
@@ -40,6 +40,7 @@
     "@babel/cli": "^7.10.1",
     "@babel/core": "^7.10.2",
     "@babel/preset-env": "^7.10.2",
+    "@babel/runtime": "^7.10.2",
     "@hapi/joi": "^17.1.1",
     "@hapi/joi-date": "^2.0.1",
     "bcrypt": "^4.0.1",
@@ -55,11 +56,13 @@
     "npm-run-all": "^4.1.5",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
+    "regenerator-runtime": "^0.13.5",
     "rimraf": "^3.0.2",
     "stripe": "^8.63.0"
   },
   "devDependencies": {
     "@babel/node": "^7.10.1",
+    "@babel/plugin-transform-runtime": "^7.10.1",
     "jest": "^26.0.1",
     "nodemon": "^2.0.4"
   }
